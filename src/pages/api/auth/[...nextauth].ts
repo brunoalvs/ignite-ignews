@@ -3,7 +3,6 @@ import GithubProvider from 'next-auth/providers/github'
 import Provider from 'next-auth/providers'
 
 export default NextAuth({
-  // Configure one or more authentication providers
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID,
@@ -14,6 +13,4 @@ export default NextAuth({
         },
       },
     }),
-    // ...add more providers here
-  ],
 })
