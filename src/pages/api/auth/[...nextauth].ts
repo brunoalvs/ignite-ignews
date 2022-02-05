@@ -18,20 +18,24 @@ export default NextAuth({
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile, credentials }) {
+    async signIn({ user }) {
       const { email } = user
 
       try {
         await fauna.query(
-          q.Create(q.Collection('users'), {
-            data: { email },
-          })
+          q.If(
+            q.Not(
+              q.Exists(q.Match(q.Index('user_by_email'), q.Casefold(email)))
+            ),
+            q.Create(q.Collection('users'), {
+              data: { email },
+            }),
+            q.Get(q.Match(q.Index('user_by_email'), q.Casefold(email)))
+          )
         )
-
         return true
-      } catch (error) {
-        // User already exists
-        console.error(error)
+      } catch (err) {
+        console.error(err)
         return false
       }
     },
