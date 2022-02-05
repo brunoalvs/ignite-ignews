@@ -31,7 +31,7 @@ export default NextAuth({
         return true
       } catch (error) {
         // User already exists
-        console.log('IXIMARIA!: error', error)
+        console.error(error)
         return false
       }
     },
